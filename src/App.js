@@ -64,7 +64,7 @@ function App() {
           <form onSubmit={handleSubmit}>
               <div className="row">
 
-                  <div className="col-4 offest-1">
+                  <div className="col-3 offset-1">
                       <div className="input-group mt-3 mb-4">
                           <label htmlFor="inputPriceThreshold" className="input-group-text">Price Threshold:</label>
                           <input
