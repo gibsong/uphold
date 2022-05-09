@@ -64,7 +64,7 @@ function App() {
           <form onSubmit={handleSubmit}>
               <div className="row">
 
-                  <div className="col-3 offset-1">
+                  <div className="col-4 offset-1">
                       <div className="input-group mt-3 mb-4">
                           <label htmlFor="inputPriceThreshold" className="input-group-text">Price Threshold:</label>
                           <input
@@ -88,7 +88,7 @@ function App() {
                       </div>
                   </div>
 
-                  <div className="col-8">
+                  <div className="col-7">
                       <div className="input-group mt-3">
                           <label htmlFor="inputInterval" className="input-group-text">Interval:</label>
                           <DurationPicker
@@ -106,7 +106,9 @@ function App() {
           </form>
 
           <div className="row">
-            <LineChartLive thresholdPrice={thresholdPrice} currencyPair={currencyPair} fetchInterval={fetchInterval}/>
+              <div className="col-11 offest-1">
+                  <LineChartLive thresholdPrice={thresholdPrice} currencyPair={currencyPair} fetchInterval={fetchInterval}/>
+              </div>
           </div>
 
         </div>
