@@ -1,0 +1,15 @@
+version: "3.8"
+services:
+  server:
+    build: ./server
+    container_name: uphold_server_c
+    ports:
+    - '9000:9000'
+  react:
+    build: .
+    container_name: react_c
+    ports:
+    - '3000:3000'
+    stdin_open: true
+    tty: true
+

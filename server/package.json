@@ -1,0 +1,22 @@
+{
+  "name": "server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "dependencies": {
+    "express": "4.17.1",
+    "cors": "2.8.5",
+    "axios": "0.27.2"
+  },
+  "scripts": {
+    "test": "jest --detectOpenHandles"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "jest": "^28.1.0",
+    "moxios": "^0.4.0",
+    "supertest": "^6.2.3"
+  }
+}
