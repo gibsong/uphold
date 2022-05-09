@@ -2,7 +2,7 @@
 
 ## Prerequisites
 
-1. Clone project from github [provide link](https://github.com/gibsong/uphold)
+1. Clone project from github [uphold solution](https://github.com/gibsong/uphold)
 
 
 ##Options
@@ -15,8 +15,10 @@ The solution can be run via Docker or as stand alone processes.
 3. Open terminal / command line
 4. Change to projects top level directory, which is named `uphold` 
 5. run cmd: `docker-compose up`
-6. open web browser and navigate to http://localhost:3000/
-7. When you are done you can shutdown with the following command: `shutdown cmd: docker-compose down`
+6. open web browser and navigate to [http://localhost:3000/](http://localhost:3000/)
+7. Shutdown options:
+    1. Type `control c` from the terminal that is running application
+    2. From a different terminal run cmd: `docker-compose down`
 
 ### Stand Alone
 
