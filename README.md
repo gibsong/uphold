@@ -15,6 +15,7 @@ The solution can be run via Docker or as stand alone processes.
 3. Open terminal / command line
 4. Change to projects top level directory, which is named `uphold` 
 5. run cmd: `docker-compose up`
+    1.  Be patient this will take a few minutes.
 6. open web browser and navigate to [http://localhost:3000/](http://localhost:3000/)
 7. Shutdown options:
     1. Type `control c` from the terminal that is running application
