@@ -18,7 +18,6 @@ function App() {
       fetch(API_CURRENCY_PAIRS_URL, HEADERS)
           .then(res => res.json())
           .then(json => {
-              //console.log(`currencyPairs response data: ${JSON.stringify(json)}`)
 
               const currencyPairs = []
               for (let j = 0; j < json.currencyPairs.length; j++) {
@@ -35,9 +34,9 @@ function App() {
         const currencyPairOptions = []
 
         for (let j = 0; j < currencyPairs.length; j++) {
-            if(currencyPairs[j] === currencyPair) {
-                currencyPairOptions.push(<option key={currencyPairs[j]} id={currencyPairs[j]}>{currencyPairs[j]}</option>)
-            } else {
+            //TODO tickers that contain periods (even when escaped in url using ASCII %2E) fail on Uphold API call, return not found.
+            //TODO Thus exclude them for now and figure out what the issue is.
+            if(currencyPairs[j] !== 'BRK.B-USD' && currencyPairs[j] !== 'USD-BRK.B') {
                 currencyPairOptions.push(<option key={currencyPairs[j]} id={currencyPairs[j]}>{currencyPairs[j]}</option>)
             }
         }
@@ -53,7 +52,6 @@ function App() {
 
     const handleSubmit = (event) => {
         event.preventDefault();
-
         let interval = (hours * 60 * 60 * 1000) + (minutes * 60 * 1000) + (seconds * 1000)
         setFetchInterval(interval)
     }
@@ -106,7 +104,7 @@ function App() {
           </form>
 
           <div className="row">
-              <div className="col-11 offest-1">
+              <div className="col-12">
                   <LineChartLive thresholdPrice={thresholdPrice} currencyPair={currencyPair} fetchInterval={fetchInterval}/>
               </div>
           </div>

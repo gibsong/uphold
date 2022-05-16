@@ -2,6 +2,7 @@ const { Router } = require('express')
 const axios = require("axios");
 const { MAX_LENGTH, MIN_LENGTH, API_TICKER_URL } = require('./config')
 
+const API_HISTORY_URL = `http://${process.env.HISTORY_HOST}:4040/api/v1/service/history/`
 
 function isValidPair(currencyPair) {
     if(currencyPair.length > MAX_LENGTH || currencyPair.length < MIN_LENGTH) {
@@ -12,6 +13,28 @@ function isValidPair(currencyPair) {
 
 module.exports = (router = new Router()) => {
 
+    router.get('/api/v1/history/:ticker', async(req, res) => {
+
+        try {
+
+            if(!isValidPair(req.params.ticker)) {
+                res.status(400).json({})
+            } else {
+                const url = `${API_HISTORY_URL}${req.params.ticker}`
+                const response = await axios.get(url);
+                if(response?.data) {
+                    res.status(200).json(response.data)
+                } else {
+                    res.status(200).json({})
+                }
+            }
+
+        } catch (error) {
+            console.log(req, "getHistoricalPrices", null, error);
+            res.status(500).json({})
+        }
+    })
+
     router.get('/api/v1/currency/:ticker', async(req, res) => {
 
         try {
@@ -20,10 +43,9 @@ module.exports = (router = new Router()) => {
                 res.status(400).json({})
             } else {
                 const url = `${API_TICKER_URL}${req.params.ticker}`
-
                 const response = await axios.get(url);
                 if(response?.data) {
-                    res.status(200).json({ask: response.data.ask})
+                    res.status(200).json({price: response.data.ask})
                 } else {
                     res.status(200).json({})
                 }

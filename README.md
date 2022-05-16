@@ -1,45 +1,26 @@
 # Uphold interview solution
 
-## Prerequisites
+This solution includes the implemenation of all three phases: mandatory, optional and bonus 
 
-1. Clone project from github [uphold solution](https://github.com/gibsong/uphold)
-
-
-##Options
-The solution can be run via Docker or as stand alone processes.
-
-### Docker
+### Running the solution
 
 1. [Install Docker Desktop](https://docs.docker.com/get-docker/)
 2. Open Docker Desktop
 3. Open terminal / command line
-4. Change to projects top level directory, which is named `uphold` 
-5. run cmd: `docker-compose up`
+4. Clone project from github [uphold solution](https://github.com/gibsong/uphold)
+5. Set environment variables:
+    1.  export POSTGRES_HOST=postgres_c
+    2.  export HISTORY_HOST=history
+6. Change to projects top level directory, which is named `uphold` 
+7. Run cmd: `docker-compose up`
     1.  Be patient this will take a few minutes.
-6. open web browser and navigate to [http://localhost:3000/](http://localhost:3000/)
-7. Shutdown options:
-    1. Type `control c` from the terminal that is running application
+    2.  The application with historical prices will be ready once you see 'inserted 436 rows' about 12 times.
+    3.  Every five minutes you will also see a scavenger run which cleans up old records  
+8. Open web browser and navigate to [http://localhost:3000/](http://localhost:3000/)
+9. Shutdown options:
+    1. Type `control c` from the terminal that is running the application
     2. From a different terminal run cmd: `docker-compose down`
 
-### Stand Alone
-
-#### Backend Server
-   
-1. Open terminal / command line 
-2. Navigate to the projects top level folder named: `uphold`
-3. Then change to the `server` folder
-4. Get dependencies, run command: `npm install`
-5. run command: `npm start`
-6. The server will startup listening for requests on port 9000
-7. Use `control c` to shutdown
-
-#### Front End React
-    
-1. Open terminal / command line 
-2. Navigate to the projects top level folder named: `uphold`
-3. Get dependencies, run command: `npm install`
-4. run command: `npm start`
-5. Open web browser and go to url: http://localhost:3000/
 
 ## Using the application
 

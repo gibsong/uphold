@@ -100,7 +100,7 @@ describe('GET currency pair prices for each ticker', () => {
         const app = initExpress();
         const res = await request(app).get('/api/v1/currency/BTC-USD');
         expect(res.statusCode).toBe(200);
-        expect(res.body).toEqual({"ask": "34520.849971282"});
+        expect(res.body).toEqual({"price": "34520.849971282"});
     });
 
     test('It should fetch null for a currency pair', async () => {

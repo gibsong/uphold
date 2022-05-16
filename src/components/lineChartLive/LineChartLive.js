@@ -3,7 +3,7 @@ import last from 'lodash/last'
 import { timeFormat } from 'd3-time-format'
 import { Line } from '@nivo/line'
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { API_BASE_URL, HEADERS } from "../../config";
+import { API_BASE_URL, API_HISTORICAL_URL, HEADERS } from "../../config";
 
 class LineChartLive extends Component {
 
@@ -21,6 +21,7 @@ class LineChartLive extends Component {
     }
 
     componentDidMount() {
+        this.getHistoricalPrices()
         this.timer = setInterval(this.next, this.props.fetchInterval)
     }
 
@@ -31,14 +32,44 @@ class LineChartLive extends Component {
     componentWillReceiveProps(nextProps) {
         //console.log(`componentWillReceiveProps nextProps data: ${nextProps?.data}, currencyPair: ${nextProps?.currencyPair}`)
         if(nextProps?.currencyPair !== this.props.currencyPair) {
-            this.setState({data:[], maxValue: 0, overMaxValue: 0})
+            this.setState({data:[], maxValue: 0, overMaxValue: 0}, () => this.getHistoricalPrices())
         }
 
-        //console.log(`this.props.fetchInterval: ${this.props.fetchInterval}, nextProps.fetchInterval: ${nextProps?.fetchInterval}`)
         if(nextProps?.fetchInterval !== this.props.fetchInterval) {
             clearInterval(this.timer)
             this.timer = setInterval(this.next, nextProps.fetchInterval)
         }
+    }
+
+    setMaxPrice = (price) => {
+        if(price > this.state.maxValue) {
+            let overMax = price * 1.2
+            this.setState({ maxValue: price, overMaxValue: overMax })
+        }
+    }
+
+    getHistoricalPrices = () => {
+        const url = `${API_HISTORICAL_URL}${this.props.currencyPair}`
+
+        fetch(url, HEADERS)
+            .then(res => res.json())
+            .then(json => {
+                //console.log(`getHistoricalPrices response data: ${JSON.stringify(json)}`)
+                let dataHistorical = []
+
+                for(let i=0; i<json.history.length; i++) {
+                    dataHistorical.push({
+                        x: new Date(json.history[i].datetime),
+                        y: json.history[i].price,
+                    })
+
+                    this.setMaxPrice(json.history[i].price)
+                }
+
+                this.setState({ data: dataHistorical })
+            }).catch((error) => {
+        });
+
     }
 
     next = () => {
@@ -48,30 +79,22 @@ class LineChartLive extends Component {
         fetch(url, HEADERS)
             .then(res => res.json())
             .then(json => {
-                //console.log(`response data: ${JSON.stringify(json)}`)
 
                 let dataLatest
                 if(this.state.data.length >= 12) {
-                    //remove oldest price and add newest price
-                    dataLatest = this.state.data.slice(1)
+                    dataLatest = this.state.data.slice(1)   //remove oldest price so you can add new price
                 } else {
                     dataLatest = this.state.data.slice(0)
                 }
 
-                const now = new Date();
                 dataLatest.push({
-                    x: now,
-                    y: json.ask,
+                    x: new Date(),
+                    y: json.price,
                 })
 
-                if(json.ask > this.state.maxValue) {
-                    let overMax = json.ask * 1.2
-                    this.setState({ maxValue: json.ask, overMaxValue: overMax })
-                }
-
+                this.setMaxPrice(json.price)
                 this.setState({ data: dataLatest })
             }).catch((error) => {
-            console.error(`fetch currencyPair: ${this.props.currencyPair} Error:`, error);
         });
 
     }
@@ -85,7 +108,6 @@ class LineChartLive extends Component {
                             <Line
                                 width={900}
                                 height={400}
-
                                 markers={[
                                     {
                                         axis: 'y',
@@ -95,14 +117,10 @@ class LineChartLive extends Component {
                                         legendPosition: 'top-left',
                                     },
                                 ]}
-
                                 margin={{ top: 30, right: 50, bottom: 60, left: 50 }}
-                                data={[
-                                    { id: '1', data: this.state.data },
-                                ]}
+                                data={[{ id: '1', data: this.state.data },]}
                                 xScale={{ type: 'time', format: 'native' }}
                                 yScale={{ type: 'linear', max: this.state.overMaxValue}}
-
                                 axisBottom={{
                                     format: '%H:%M:%S',
                                     tickValues: 5,

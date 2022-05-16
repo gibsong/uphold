@@ -1,15 +1,55 @@
 version: "3.8"
 services:
+  postgres_c:
+    image: postgres
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      timeout: 5s
+      interval: 5s
+      retries: 5
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=password
+      - APP_DB_USER=docker
+      - APP_DB_PASS=password
+      - APP_DB_NAME=uphold
+    volumes:
+      - ./historical_db/db:/docker-entrypoint-initdb.d/
+    ports:
+      - '5432:5432'
+  populate_db:
+    build: ./historical_db
+    container_name: populate_db_c
+    environment:
+      - POSTGRES_HOST=${POSTGRES_HOST}
+    depends_on:
+      postgres_c:
+        condition: service_healthy
+  history:
+    build: ./service
+    container_name: history_c
+    environment:
+      - POSTGRES_HOST=${POSTGRES_HOST}
+    ports:
+      - '4040:4040'
+    depends_on:
+      - populate_db
   server:
     build: ./server
     container_name: uphold_server_c
+    environment:
+      - HISTORY_HOST=${HISTORY_HOST}
     ports:
-    - '9000:9000'
+      - '9000:9000'
+    depends_on:
+      - history
   react:
     build: .
     container_name: react_c
     ports:
-    - '3000:3000'
+      - '3000:3000'
     stdin_open: true
     tty: true
+    depends_on:
+      - server
 

@@ -1,0 +1,16 @@
+{
+  "name": "historical_db",
+  "version": "1.0.0",
+  "description": "",
+  "main": "dbPopulator.js",
+  "scripts": {
+    "start": "node dbPopulator.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^0.27.2",
+    "pg": "^8.7.3",
+    "pg-copy-streams": "^6.0.2"
+  }
+}
